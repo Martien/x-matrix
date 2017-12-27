@@ -1,0 +1,117 @@
+* {
+margin: 0;
+padding: 0;
+}
+
+html {
+      background:none;
+}
+
+body {
+	background: none;
+	position: absolute;
+	top:0; bottom:0;
+	left:0; right:0;
+}
+
+.svg-container {
+	display: inline-block;
+	position: relative;
+	width: 100%;
+	padding-bottom: 100%;
+	vertical-align: middle;
+	overflow: hidden;
+}
+
+svg-content {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.hairline {
+  /*stroke: steelblue;*/
+  stroke-width: .01mm;
+  display: initial;
+  fill: none;
+}
+
+
+.dot-default {
+  fill: inherit;
+}
+
+.outline {
+  stroke: steelblue;
+  stroke-width: 0.01mm;
+  fill: none;
+  display: initial;
+}
+
+#center {
+  fill: red;
+  pointer-events: all;            /* SVG only */
+}
+
+#center:hover {
+  stroke: steelblue;
+  stroke-width: 0.01mm;
+}
+
+.gap {
+  fill: none;
+}
+
+#dot {
+  fill: lightgreen;
+  pointer-events: all;            /* SVG only */
+}
+#dot:hover {
+  stroke: steelblue;
+  stroke-width: 0.1mm;
+}
+.direction {
+  fill: inherit;
+  opacity: 0.1
+}
+.north-east {
+  fill: url(#fader-north-east);
+  opacity: .1;
+}
+
+.north-west {
+  fill: url(#fader-north-west);
+  opacity: .1;
+}
+
+.south-west {
+  fill: url(#fader-south-west);
+  opacity: .1;
+}
+
+.south-east {
+  fill: url(#fader-south-east);
+  opacity: .1;
+}
+
+.index {
+  font-family: "Sun", "Avenir Next";
+  font-size: .7pt;
+  fill: gray;
+  text-anchor: center;
+}
+.section {
+  font-family: "Sun", "Avenir Next";
+  font-weight: 900;
+  font-size: 1.5pt;
+  fill: rgb(237,23,35);
+  text-transform: uppercase;
+
+}
+
+.entry {
+  font-family: "Sun", "Avenir Next";
+  font-size: 1.1pt;
+
+}

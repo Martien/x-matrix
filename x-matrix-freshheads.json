@@ -1,0 +1,90 @@
+[
+	{
+		"title": "Fresheads Flow Team",
+		"timeWindow": "2018 Q1",
+		"gap": 1.5,
+		"padding": 1,
+		"arm": 45,
+		"zigzag":
+		[
+			{
+				"kind": "zig",
+				"panels":
+				[
+					{
+						"direction": "north-east",
+						"section": "1—dromen",
+						"anchor": "start",
+						"entries":
+						[
+							{"entry": "Fresheads creëert voortdurend topteams met continue verbetercyclus"},
+							{"entry": "Alle heads zijn blij en enthousiast om bij Freshheads te werken."},
+							{"entry": "Onze klanten zijn superblij met wat we doen en hoe we samenwerken."}
+						]
+					},{
+						"direction": "south-west",
+						"section": "3—doen (Objectives)",
+						"anchor": "end",
+						"entries":
+						[
+							{"entry": "Freshheads ademt flow."},
+							{"entry": "Afrekenen op basis van resultaat."},
+							{"entry": "Stop met starten, start met finishen."},
+							{"entry": "Freshheads publiceert haar ‘uitblinkgids’"},
+							{"entry": "Creëer en leef een heldere, bedrijfsbrede consistente en samenhangende manier van werken."}
+						]
+					}				]
+			},{
+				"kind": "zag",
+				"panels":
+				[
+					{
+						"direction": "north-west",
+						"section": "2—durven",
+						"anchor": "end",
+						"entries":
+						[
+							{"entry": "Onze klanten zijn blij met onze bedrijfsbrede, consistente, coherente en complete workflow."},
+							{"entry": "De Product Owners van onze klanten zijn enorm gewild in de markt."},
+							{"entry": "Het Flow Team loopt voorop en toont de weg."},
+							{"entry": "Wij leven ons Freshheads Flow Manifesto."},
+							{"entry": "Klantkaizen zit in ons DNA."}
+						]
+					},{
+						"direction": "south-east",
+						"section": "4—demo (Key Results)",
+						"anchor": "start",
+						"entries":
+						[
+							{"entry": "100% van alle opdrachten is gepland in blokken van tenminste één dag."},
+							{"entry": "Doorstroomvolume, voorspelbaarheid en doorlooptijd worden ‘gratis’ gegenereerd."},
+							{"entry": "90% van onze opdrachten worden op tijd en volgens verwachting opgeleverd."},
+							{"entry": "100% van alle releases zijn live voordat met een volgende begonnen wordt."},
+							{"entry": "Elk team is met maximaal één hoofdzaak bezig."},
+							{"entry": "Iedereen houdt zich aan het expliciete beleid voor standaard, prioriteit en spoed."},
+							{"entry": "Factureren gaat op basis van opgeleverde resultaten en uitkomsten."},
+							{"entry": "Gemiddelde groei doorstroomvolume tenminste 20% per jaar."},
+							{"entry": "80% van onze collega’s vindt dat onze werkwijze het beste in ons naar boven haalt."},
+							{"entry": "Team happiness is gemiddeld constant een 8 of hoger."},
+							{"entry": "WIP limits zijn op de juiste plekken ingesteld, worden gehandhaafd en genereren inzichten voor verbeteringen."},
+							{"entry": "Onze Klantleiding is gedeeld met al onze klanten."},
+							{"entry": "De concept van onze ‘uitblinkgids’ ligt ter recensie bij 10 relevante klanten."}
+						]
+					},{
+						"direction": "north-east",
+						"section": "4—team",
+						"anchor": "start",
+						"entries":
+						[
+							{"entry": "John"},
+							{"entry": "Paul"},
+							{"entry": "George"},
+							{"entry": "Ringo"}
+						]
+					}
+
+				]
+			}
+		]
+	}
+]
