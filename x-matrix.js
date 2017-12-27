@@ -4,20 +4,20 @@ d3.json("x-matrix.json", function(error, data) {
 	drawMatrix(data[0]);
 });
 
+// drawMatrix() sets up the canvas, then draws each layer.
 function drawMatrix(m) {
-  var svg = setupSVG();
-	m.clicks = 0;
-	setupGradients(svg);
+  var canvas = setupCanvas();
+	setupGradients(canvas);
   setupZigZag(m);
-  drawPanels(svg, m.zigzag);
-  drawGrids(svg, m.zigzag);
-  drawNumbers(svg, m.zigzag);
-	//drawClickers(svg, m);
-  drawText(svg, m.zigzag);
-  drawOrigin(m, svg);
+  drawPanels(canvas, m.zigzag);
+  drawGrids(canvas, m.zigzag);
+  drawNumbers(canvas, m.zigzag);
+	//drawClickers(canvas, m);
+  drawText(canvas, m.zigzag);
+  drawOrigin(canvas, m);
 }
 
-function setupSVG() {
+function setupCanvas() {
   return d3.select("body")
     .append("svg")
     .attr("viewBox", "-500 -50 1000 2000")
@@ -71,16 +71,16 @@ function createGradient(defs, id, color) {
 		;
 }
 
-function drawPanels(xMatrix, zigzag) {
-  xMatrix.append("g")
+function drawPanels(canvas, zigzag) {
+  canvas.append("g")
     .attr("id", "panels")
     .selectAll("_")
   	.data(zigzag).enter().append("g")
-    	.attr("id", function(d){return d.kind;})
       .selectAll("_")
       .data(function(d) {return d.panels;}).enter().append("g")
         .attr("id", function(d){return d.section;})
-        .attr("transform", function(d){return d.transform;}).append("path")
+        .attr("transform", function(d){return d.transform;})
+				.append("path")
         .attr("class", function(d, i){return d.direction;})
 				.attr("fill", function(d){return "url(#fade-" + d.direction + ")";})
         .attr("transform", function(d){return d.originPanel})
@@ -166,10 +166,10 @@ function drawText(xMatrix, zigzag) {
   ;
 }
 
-function drawClickers(svg, matrix) {
+function drawClickers(canvas, matrix) {
 	var clickers = setupClickers(matrix);
 	console.log(clickers);
-	var rows = svg.append("g").attr("id", "clickers")
+	var rows = canvas.append("g").attr("id", "clickers")
 	.attr("transform", "translate(0,2)")
 	.selectAll("_")
 		.data(clickers).enter().append("g")
@@ -213,9 +213,9 @@ function drawClickers(svg, matrix) {
 		;
 }
 
-function drawOrigin(matrix, svg) {
+function drawOrigin(canvas, matrix) {
 	var fills = ["red", "lightblue", "steelblue", "none"];
-  svg.append("g").attr("id", "center")
+  canvas.append("g").attr("id", "center")
     .append("circle")
     .attr("id", "center")
     .attr("r", .5)
@@ -225,28 +225,119 @@ function drawOrigin(matrix, svg) {
     ;
 }
 
+// legLenght() returns the number of units for all panels, plus gaps and padding.
+function legLength(panels, gap, padding) {
+	var units = (panels.length - 1) * gap;
+	for (j = 0; j < panels.length; j++) {
+		units += panels[j].entries.length;
+	}
+	return 2 * (units + padding);
+}
+
+
+// setupSide() sets up one side and returns the start for the next one.
+// The start point is a single number, because x == y.
+function setupSide(m, z, s) {
+	var slope = z.kind == "zig" ? +1 : -1;
+	var panels = z.panels;
+	var xx = yy = s; // origin is at (s, s)
+	var xx0 = 0;
+	var yy0 = 0;
+	//console.log(l);
+
+	for (j = 0; j < panels.length; j++) {
+		panel = panels[j];
+
+		northEast = (z.kind == "zig") && (panel.anchor == "start");
+		northWest = (z.kind == "zag") && (panel.anchor == "end");
+		southEast = (z.kind == "zag") && (panel.anchor == "start");
+		southWest = (z.kind == "zig") && (panel.anchor == "end");
+
+		upperHalf = northEast || northWest;
+		lowerHalf = southEast || southWest;
+
+		leftHalf  = northWest || southWest;
+		rightHalf = northEast || southEast;
+
+		//-------------------------------------------------------------------
+		// At each entry store dx, so consecutive entries staircase
+		// in the right direction.
+		for (e = 0; e < panel.entries.length; e++) {
+			panel.entries[e].dx = slope;
+			panel.entries[e].dxIndex = 1.5 * (upperHalf ? -slope : slope);
+		}
+
+		//-------------------------------------------------------------------
+		// At each panel, store local transformation strings.
+		// Used by both both panels and gridLines.
+		// Since panels and grids all draw from (0,0), they need to
+		// nudge themselves #rows left&down when flipped vertically and
+		// #rows right&down when flipped both vertically & horizontally.
+		nudgeX = upperHalf ? 0 : 2 * slope * panel.entries.length;
+		nudgeY = slope * nudgeX;
+		// Flip left-right when we are in the left side.
+		scaleX = rightHalf ? +1 : -1;
+		// Flip up-down when we are in the lower half.
+		scaleY = upperHalf ? +1 : -1;
+
+		// Add local transformation string for panel or gridLines.
+		panel.originPanel = translate(nudgeX, nudgeY) + scale(scaleX, scaleY);
+
+		// At panel, create and store string for panel path.
+		panel.panelPath = panelPath(panel.entries.length, z.leg, m.arm);
+
+		// At panel, create and store a path string for grid lines
+		panel.gridLines = gridLines(panel.entries.length, z.leg, m.arm);
+
+		//-------------------------------------------------------------------
+		// At each panel, store its origin (x0, y0).
+		// Panels, grid lines and text entries all render relative to this origin,
+		// and locally nudge into place if needed .
+
+		// Add a gap before every panel but the first one.
+		if (j > 0) {
+			xx += m.gap * slope;
+			yy += m.gap;
+		}
+
+		// Calculate actual coordinates, moving padding away from the center.
+		xx0 = 2 * xx + m.padding;
+		yy0 = 2 * yy - slope * m.padding;
+
+		// Shift the whole along the panel’s leg when on the other (left) side.
+		if (leftHalf) {
+			xx0 -= z.leg;
+			yy0 += slope * z.leg;
+		}
+
+		// Now we’re at the origin. Calculate transform strings here.
+		panel.transform = translate(xx0, yy0);
+
+		// In the lowerHalf, align the start of the text with the previous
+		// start position, so shift it right by one unit.
+		panel.originText = translate(xx0 + (lowerHalf ? -2 * slope : 0), yy0);
+		panel.originEntries = translate(2 * slope, 2);
+
+		xx += panel.entries.length * slope;
+		yy += panel.entries.length;
+	}
+	return yy;
+}
+
+// setupZigzag() augments the data structure for elegant rendering by d3.
 function setupZigZag(matrix) {
-	// Set up and agument the data structure read from the JSON file:
-	// - add x and y coordinates for each
-	//   - text entry;
-	//   - section title
 	var zigzag = matrix.zigzag;
+	var zig = zigzag[0];
+	var zag = zigzag[1];
+	var zip = 0;
 
-  // First, sum the total number of entries per zig and zag.
-  // We will be needing this later for the length of the other section.
-  for (i = 0; i < zigzag.length; i++) {
-    units = (zigzag[i].panels.length - 1) * matrix.gap; // keep for R1!
-    for (j = 0; j < zigzag[i].panels.length; j++) {
-      units += zigzag[i].panels[j].entries.length; // keep for R1!
-    }
-    zigzag[other(i)].leg = 2 * (units + matrix.padding);
-  }
+	// The length of one leg is the other’s number of units.
+	zag.leg = legLength(zig.panels, matrix.gap, matrix.padding);
+	zig.leg = legLength(zag.panels, matrix.gap, matrix.padding);
 
-  console.log(matrix);
-
+	/*
   var xx = 0;
   var yy = 0;
-
   for (i = 0; i < zigzag.length; i++) {
     side = zigzag[i];
     slope = side.kind == "zig" ? +1 : -1;
@@ -338,6 +429,11 @@ function setupZigZag(matrix) {
     }
 
   }
+*/
+	zip = setupSide(matrix, zig, 0); // zig starts at (0,0)
+	zip = setupSide(matrix, zag, zip); // zag starts where zig ended
+
+	console.log(matrix);
 }
 
 function Paneel(x, y, rij) {
