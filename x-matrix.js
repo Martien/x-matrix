@@ -1,4 +1,3 @@
-
 d3.json("x-matrix.json", function(error, data) {
 	if (error) return console.warn(error);
 	drawMatrix(data[0]);
@@ -137,7 +136,7 @@ function drawNumbersForOneSide(canvas, panels) {
 		.data(function(d) {return d.entries;}).enter()
 			.append('text')
 			.attr("class", "index")
-			.attr("x", function(d, i){return 2 * i * d.dx;})
+			.attr("x", function(d, i){return 2 * i * d.slope;})
 			.attr("y", function(d, i){return 2 * i;})
 			.attr("dx", function(d){return d.dxIndex;})
 			.attr("dy", "-.9")
@@ -173,7 +172,7 @@ function drawTextForOneSide(canvas, panels) {
 		.data(function(d) {return d.entries;})
 			.enter().append('text')
 			.attr("class", "entry")
-			.attr("x", function(d, i){return 2 * i * d.dx;})
+			.attr("x", function(d, i){return 2 * i * d.slope;})
 			.attr("y", function(d, i){return 2 * i;})
 			.attr("dy", "-.5")
 			.text(function(d, i){return d.entry;})
@@ -251,8 +250,7 @@ function legLength(panels, gap, padding) {
 
 // setupSide() sets up one side and returns the start for the next one.
 // The start point is a single number, because x == y.
-function setupSide(m, z, s) {
-	var slope = z.kind == "zig" ? +1 : -1;
+function setupSide(m, z, s, slope) {
 	var panels = z.panels;
 	var xx = yy = s; // origin is at (s, s)
 	var xx0 = 0;
@@ -262,10 +260,10 @@ function setupSide(m, z, s) {
 	for (j = 0; j < panels.length; j++) {
 		panel = panels[j];
 
-		northEast = (z.kind == "zig") && (panel.anchor == "start");
-		northWest = (z.kind == "zag") && (panel.anchor == "end");
-		southEast = (z.kind == "zag") && (panel.anchor == "start");
-		southWest = (z.kind == "zig") && (panel.anchor == "end");
+		northEast = (slope == +1) && (panel.anchor == "start");
+		northWest = (slope == -1) && (panel.anchor == "end");
+		southEast = (slope == -1) && (panel.anchor == "start");
+		southWest = (slope == +1) && (panel.anchor == "end");
 
 		upperHalf = northEast || northWest;
 		lowerHalf = southEast || southWest;
@@ -273,15 +271,13 @@ function setupSide(m, z, s) {
 		leftHalf  = northWest || southWest;
 		rightHalf = northEast || southEast;
 
-		//-------------------------------------------------------------------
-		// At each entry store dx, so consecutive entries staircase
+		// At each entry store the slope, so consecutive entries staircase
 		// in the right direction.
 		for (e = 0; e < panel.entries.length; e++) {
-			panel.entries[e].dx = slope;
+			panel.entries[e].slope = slope;
 			panel.entries[e].dxIndex = 1.5 * (upperHalf ? -slope : slope);
 		}
 
-		//-------------------------------------------------------------------
 		// At each panel, store local transformation strings.
 		// Used by both both panels and gridLines.
 		// Since panels and grids all draw from (0,0), they need to
@@ -352,10 +348,11 @@ function setupZigZag(matrix) {
 	zag.leg = legLength(zig.panels, matrix.gap, matrix.padding);
 	zig.leg = legLength(zag.panels, matrix.gap, matrix.padding);
 
-	zip = setupSide(matrix, zig, 0); // zig starts at (0,0)
-	zip = setupSide(matrix, zag, zip); // zag starts where zig ended
+	zip = setupSide(matrix, zig, zip, +1); // zig starts at (0,0)
+	zip = setupSide(matrix, zag, zip, -1); // zag starts where zig ended
 
 	console.log(matrix);
+	console.log(Object.keys(matrix));
 }
 
 function Paneel(x, y, rij) {
