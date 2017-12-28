@@ -28,8 +28,8 @@ function setupCanvas() {
   ;
 }
 
-function setupGradients(svg) {
-	var defs = svg.append("defs");
+function setupGradients(canvas) {
+	var defs = canvas.append("defs");
 
 	createGradient(defs, "fader-north-east", "green");
 	createGradient(defs, "fader-north-west", "orange");
@@ -37,11 +37,11 @@ function setupGradients(svg) {
 	createGradient(defs, "fader-south-east", "red");
 
 	var gridlineGradient = defs.append("linearGradient")
-	.attr("id", "fader-gridline")
-	.attr("x1", "0%")
-	.attr("x2", "100%")
-	.attr("y1", "0%")
-	.attr("y2", "0%")
+		.attr("id", "fader-gridline")
+		.attr("x1", "0%")
+		.attr("x2", "100%")
+		.attr("y1", "0%")
+		.attr("y2", "0%")
 	;
 	gridlineGradient.append("stop")
 		.attr("offset", "40%")
@@ -87,9 +87,6 @@ function drawPanels(canvas, zigzag) {
   ;
 }
 
-function drawPanel(canvas, z) {
-
-}
 function drawGrids(xMatrix, zigzag) {
   xMatrix.append("g")
     .attr("id", "grids")
@@ -110,24 +107,23 @@ function drawNumbers(xMatrix, zigzag) {
   var entries = xMatrix.append("g")
   	.attr("id", "numbers")
   	.selectAll("_")
-  		.data(zigzag).enter().append("g")
+		.data(zigzag).enter()
   		.selectAll("_")
-  			.data(function(d) {return d.panels;}).enter().append("g")
-  			.attr("id", function(d){return d.section;})
-  			.attr("text-anchor", function(d){return d.anchor;})
+			.data(function(d) {return d.panels;}).enter()
+				.append("g")
         .attr("transform", function(d){return d.originText;})
+				.attr("text-anchor", function(d){return d.anchor;})
 	;
 
   entries.append("g")
-    .attr("id", "numbers")
     .attr("transform", function(d){return d.originEntries;})
     .selectAll("_")
-    .data(function(d) {return d.entries;})
-      .enter().append('text')
+    .data(function(d) {return d.entries;}).enter()
+			.append('text')
       .attr("class", "index")
-      .attr("dx", function(d){return d.dxIndex;})
       .attr("x", function(d, i){return 2 * i * d.dx;})
       .attr("y", function(d, i){return 2 * i;})
+			.attr("dx", function(d){return d.dxIndex;})
       .attr("dy", "-.9")
       .text(function(d, i){return i + 1;})
   ;
@@ -137,11 +133,9 @@ function drawText(xMatrix, zigzag) {
   var entries = xMatrix.append("g")
   	.attr("id", "contents")
   	.selectAll("_")
-  		.data(zigzag).enter().append("g")
-  		.attr("id", function(d){return d.kind;})
+  		.data(zigzag).enter()
   		.selectAll("_")
   			.data(function(d) {return d.panels;}).enter().append("g")
-  			.attr("id", function(d){return d.section;})
   			.attr("text-anchor", function(d){return d.anchor;})
         .attr("transform", function(d){return d.originText;})
 	;
@@ -153,7 +147,7 @@ function drawText(xMatrix, zigzag) {
   ;
 
 	// text > entries
-  entries.append("g").attr("id", "entries")
+  entries.append("g")
     .attr("transform", function(d){return d.originEntries;})
     .selectAll("_")
     .data(function(d) {return d.entries;})
@@ -215,9 +209,9 @@ function drawClickers(canvas, matrix) {
 
 function drawOrigin(canvas, matrix) {
 	var fills = ["red", "lightblue", "steelblue", "none"];
-  canvas.append("g").attr("id", "center")
+  canvas.append("g").attr("id", "home")
     .append("circle")
-    .attr("id", "center")
+    .attr("class", "home")
     .attr("r", .5)
 		.on("click", function(d){
 			d3.select(this).style("fill", fills[(++matrix.clicks % 4)]);
@@ -330,6 +324,9 @@ function setupZigZag(matrix) {
 	var zig = zigzag[0];
 	var zag = zigzag[1];
 	var zip = 0;
+
+	// Home button of matrix at (0,0) can be clicked. Pointless at the same time.
+	matrix.clicks = 0;
 
 	// The length of one leg is the other’s number of units.
 	zag.leg = legLength(zig.panels, matrix.gap, matrix.padding);

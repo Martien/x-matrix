@@ -49,12 +49,12 @@ svg-content {
   display: initial;
 }
 
-#center {
+.home {
   fill: red;
   pointer-events: all;            /* SVG only */
 }
 
-#center:hover {
+.home:hover {
   stroke: steelblue;
   stroke-width: 0.01mm;
 }
