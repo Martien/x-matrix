@@ -10,7 +10,7 @@ function drawMatrix(m) {
 	setupGradients(canvas);
   setupZigZag(m);
 	drawPanels(canvas, m);
-  drawGrids(canvas, m.zigzag);
+	drawGrids(canvas, m);
   drawNumbers(canvas, m.zigzag);
 	//drawClickers(canvas, m);
   drawText(canvas, m.zigzag);
@@ -71,15 +71,17 @@ function createGradient(defs, id, color) {
 		;
 }
 
+// drawPanels() draws the panels (arms & legs), one for zig, one for zag.
 function drawPanels(canvas, matrix) {
 	var zig = matrix.zigzag[0];
 	var zag = matrix.zigzag[1];
-	g = canvas.append("g").attr("id", "panels").selectAll("_");
+	var g = canvas.append("g").attr("id", "panels").selectAll("_");
 
 	drawPanel(g, zig.panels);
 	drawPanel(g, zag.panels);
 }
 
+// drawPanel() draws the panels (arms & legs) for a single side.
 function drawPanel(canvas, panels) {
 	canvas.data(panels).enter().append("g")
 		.attr("transform", function(d){return d.transform;})
@@ -91,20 +93,26 @@ function drawPanel(canvas, panels) {
 	;
 }
 
-function drawGrids(xMatrix, zigzag) {
-  xMatrix.append("g")
-    .attr("id", "grids")
-    .selectAll("_")
-  	.data(zigzag).enter()
-      .selectAll("_")
-      .data(function(d) {return d.panels;}).enter().append("g")
-        .attr("transform", function(d){return d.transform;})
-				.append("path")
-        .attr("class", "hairline")
-				.attr("stroke", "url(#fader-gridline)")
-        .attr("transform", function(d){return d.originPanel})
-        .attr("d", function(d){return d.gridLines;})
-  ;
+// drawGrids() draws the gridlines, one for zig, one for zag.
+function drawGrids(canvas, matrix) {
+	var zig = matrix.zigzag[0];
+	var zag = matrix.zigzag[1];
+	g = canvas.append("g").attr("id", "grids").selectAll("_");
+
+	drawGrid(g, zig.panels);
+	drawGrid(g, zag.panels);
+}
+
+// drawGrid() draws the gridlines for a single side.
+function drawGrid(canvas, panels) {
+	canvas.data(panels).enter().append("g")
+		.attr("transform", function(d){return d.transform;})
+		.append("path")
+		.attr("class", "hairline")
+		.attr("stroke", "url(#fader-gridline)")
+		.attr("transform", function(d){return d.originPanel})
+		.attr("d", function(d){return d.gridLines;})
+	;
 }
 
 function drawNumbers(xMatrix, zigzag) {
