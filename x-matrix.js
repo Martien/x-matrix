@@ -13,7 +13,7 @@ function drawMatrix(m) {
 	drawGrids(canvas, m);
 	drawNumbers(canvas, m);
 	//drawClickers(canvas, m);
-  drawText(canvas, m.zigzag);
+	drawText(canvas, m);
   drawOrigin(canvas, m);
 }
 
@@ -145,35 +145,39 @@ function drawNumbersForOneSide(canvas, panels) {
 	;
 }
 
-function drawText(xMatrix, zigzag) {
-  var entries = xMatrix.append("g")
-  	.attr("id", "contents")
-  	.selectAll("_")
-  		.data(zigzag).enter()
-  		.selectAll("_")
-  			.data(function(d) {return d.panels;}).enter().append("g")
-  			.attr("text-anchor", function(d){return d.anchor;})
-        .attr("transform", function(d){return d.originText;})
+// drawText() renders section title and entries for each panel in zig & zag.
+function drawText(canvas, matrix) {
+	var zig = matrix.zigzag[0];
+	var zag = matrix.zigzag[1];
+	g = canvas.append("g").attr("id", "texts").selectAll("_");
+
+	drawTextForOneSide(g, zig.panels);
+	drawTextForOneSide(g, zag.panels);
+}
+
+// drawText() renders section titles and entries for a single side.
+function drawTextForOneSide(canvas, panels) {
+	var entries = canvas.data(panels).enter().append("g")
+		.attr("text-anchor", function(d){return d.anchor;})
+		.attr("transform", function(d){return d.originText;})
 	;
-
-	// text > section titles
-  entries.append("text").attr("class", "section")
-  	.attr("dy", "-.5")
-    .text(function(d){return d.section;})
-  ;
-
-	// text > entries
-  entries.append("g")
-    .attr("transform", function(d){return d.originEntries;})
-    .selectAll("_")
-    .data(function(d) {return d.entries;})
-      .enter().append('text')
-      .attr("class", "entry")
-      .attr("x", function(d, i){return 2 * i * d.dx;})
-      .attr("y", function(d, i){return 2 * i;})
-      .attr("dy", "-.5")
-      .text(function(d, i){return d.entry;})
-  ;
+	// section titles
+	entries.append("text").attr("class", "section")
+		.attr("dy", "-.5")
+		.text(function(d){return d.section;})
+	;
+	// entries
+	entries.append("g")
+		.attr("transform", function(d){return d.originEntries;})
+		.selectAll("_")
+		.data(function(d) {return d.entries;})
+			.enter().append('text')
+			.attr("class", "entry")
+			.attr("x", function(d, i){return 2 * i * d.dx;})
+			.attr("y", function(d, i){return 2 * i;})
+			.attr("dy", "-.5")
+			.text(function(d, i){return d.entry;})
+	;
 }
 
 function drawClickers(canvas, matrix) {
