@@ -75,10 +75,9 @@ function drawPanels(canvas, zigzag) {
   canvas.append("g")
     .attr("id", "panels")
     .selectAll("_")
-  	.data(zigzag).enter().append("g")
+  	.data(zigzag).enter()
       .selectAll("_")
       .data(function(d) {return d.panels;}).enter().append("g")
-        .attr("id", function(d){return d.section;})
         .attr("transform", function(d){return d.transform;})
 				.append("path")
         .attr("class", function(d, i){return d.direction;})
@@ -88,16 +87,18 @@ function drawPanels(canvas, zigzag) {
   ;
 }
 
+function drawPanel(canvas, z) {
+
+}
 function drawGrids(xMatrix, zigzag) {
   xMatrix.append("g")
     .attr("id", "grids")
     .selectAll("_")
-  	.data(zigzag).enter().append("g")
-      .attr("id", function(d){return d.kind;})
+  	.data(zigzag).enter()
       .selectAll("_")
       .data(function(d) {return d.panels;}).enter().append("g")
-        .attr("id", function(d){return d.section;})
-        .attr("transform", function(d){return d.transform;}).append("path")
+        .attr("transform", function(d){return d.transform;})
+				.append("path")
         .attr("class", "hairline")
 				.attr("stroke", "url(#fader-gridline)")
         .attr("transform", function(d){return d.originPanel})
@@ -335,101 +336,6 @@ function setupZigZag(matrix) {
 	zag.leg = legLength(zig.panels, matrix.gap, matrix.padding);
 	zig.leg = legLength(zag.panels, matrix.gap, matrix.padding);
 
-	/*
-  var xx = 0;
-  var yy = 0;
-  for (i = 0; i < zigzag.length; i++) {
-    side = zigzag[i];
-    slope = side.kind == "zig" ? +1 : -1;
-    panels = side.panels;
-    for (j = 0; j < panels.length; j++) {
-      panel = panels[j];
-
-      northEast = (side.kind == "zig") && (panel.anchor == "start");
-      northWest = (side.kind == "zag") && (panel.anchor == "end");
-      southEast = (side.kind == "zag") && (panel.anchor == "start");
-      southWest = (side.kind == "zig") && (panel.anchor == "end");
-
-      upperHalf = northEast || northWest;
-      lowerHalf = southEast || southWest;
-
-      leftHalf  = northWest || southWest;
-      rightHalf = northEast || southEast;
-
-      //-------------------------------------------------------------------
-      // At each entry store dx, so consecutive entries staircase
-      // in the right direction.
-      for (e = 0; e < panel.entries.length; e++) {
-        panel.entries[e].dx = slope;
-        panel.entries[e].dxIndex = 1.5 * (upperHalf ? -slope : slope);
-      }
-
-      //-------------------------------------------------------------------
-      // At each panel, store local transformation strings.
-      // Used by both both panels and gridLines.
-      // Since panels and grids all draw from (0,0), they need to
-      // nudge themselves #rows left&down when flipped vertically and
-      // #rows right&down when flipped both vertically & horizontally.
-      nudgeX = upperHalf ? 0 : 2 * slope * panel.entries.length;
-      nudgeY = slope * nudgeX;
-      // Flip left-right when we are in the left side
-      scaleX = rightHalf ? +1 : -1;
-      // Flip up-down when we are in the lower half: either
-      // zag & start or zig & end.
-      scaleY = upperHalf ? +1 : -1;
-
-      // Add local transformation string for panel or gridLines.
-      panel.originPanel = translate(nudgeX, nudgeY) + scale(scaleX, scaleY);
-
-      // at panel, create and store string for panelPath
-      panel.panelPath = panelPath(
-        panel.entries.length,
-        side.leg,
-        matrix.arm
-      );
-
-      // at panel, create and store a path string for grid lines
-      panel.gridLines = gridLines(
-        panel.entries.length,
-        side.leg,
-        matrix.arm
-      );
-
-      //-------------------------------------------------------------------
-      // At each panel, store its origin (x0, y0).
-      // Panels, grid lines and text entries all render relative to this origin,
-      // and locally nudge into place if needed .
-
-      // Add a gap before every panel but the first one.
-      if (j > 0) {
-        xx += matrix.gap * slope;
-        yy += matrix.gap;
-      }
-
-      // Calculate actual coordinates, moving padding away from the center.
-      xx0 = 2 * xx + matrix.padding;
-      yy0 = 2 * yy - slope * matrix.padding;
-
-      // Shift the whole along the panel’s leg when on the other (left) side.
-      if (leftHalf) {
-        xx0 -= side.leg;
-        yy0 += slope * side.leg;
-      }
-
-      // Now we’re at the origin. Calculate transform strings here.
-      panel.transform = translate(xx0, yy0);
-
-      // In the lowerHalf, align the start of the text with the previous
-      // start position, so shift it right by one unit.
-      panel.originText = translate(xx0 + (lowerHalf ? -2 * slope : 0), yy0);
-      panel.originEntries = translate(2 * slope, 2);
-
-      xx += panel.entries.length * slope;
-      yy += panel.entries.length;
-    }
-
-  }
-*/
 	zip = setupSide(matrix, zig, 0); // zig starts at (0,0)
 	zip = setupSide(matrix, zag, zip); // zag starts where zig ended
 
