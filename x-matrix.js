@@ -9,7 +9,7 @@ function drawMatrix(m) {
   var canvas = setupCanvas();
 	setupGradients(canvas);
   setupZigZag(m);
-  drawPanels(canvas, m.zigzag);
+	drawPanels(canvas, m);
   drawGrids(canvas, m.zigzag);
   drawNumbers(canvas, m.zigzag);
 	//drawClickers(canvas, m);
@@ -71,20 +71,24 @@ function createGradient(defs, id, color) {
 		;
 }
 
-function drawPanels(canvas, zigzag) {
-  canvas.append("g")
-    .attr("id", "panels")
-    .selectAll("_")
-  	.data(zigzag).enter()
-      .selectAll("_")
-      .data(function(d) {return d.panels;}).enter().append("g")
-        .attr("transform", function(d){return d.transform;})
-				.append("path")
-        .attr("class", function(d, i){return d.direction;})
-				.attr("fill", function(d){return "url(#fade-" + d.direction + ")";})
-        .attr("transform", function(d){return d.originPanel})
-        .attr("d", function(d){return d.panelPath;})
-  ;
+function drawPanels(canvas, matrix) {
+	var zig = matrix.zigzag[0];
+	var zag = matrix.zigzag[1];
+	g = canvas.append("g").attr("id", "panels").selectAll("_");
+
+	drawPanel(g, zig.panels);
+	drawPanel(g, zag.panels);
+}
+
+function drawPanel(canvas, panels) {
+	canvas.data(panels).enter().append("g")
+		.attr("transform", function(d){return d.transform;})
+		.append("path")
+		.attr("class", function(d, i){return d.direction;})
+		.attr("fill", function(d){return "url(#fade-" + d.direction + ")";})
+		.attr("transform", function(d){return d.originPanel})
+		.attr("d", function(d){return d.panelPath;})
+	;
 }
 
 function drawGrids(xMatrix, zigzag) {
