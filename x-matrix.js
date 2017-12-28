@@ -11,7 +11,7 @@ function drawMatrix(m) {
   setupZigZag(m);
 	drawPanels(canvas, m);
 	drawGrids(canvas, m);
-  drawNumbers(canvas, m.zigzag);
+	drawNumbers(canvas, m);
 	//drawClickers(canvas, m);
   drawText(canvas, m.zigzag);
   drawOrigin(canvas, m);
@@ -115,30 +115,34 @@ function drawGrid(canvas, panels) {
 	;
 }
 
-function drawNumbers(xMatrix, zigzag) {
-  var entries = xMatrix.append("g")
-  	.attr("id", "numbers")
-  	.selectAll("_")
-		.data(zigzag).enter()
-  		.selectAll("_")
-			.data(function(d) {return d.panels;}).enter()
-				.append("g")
-        .attr("transform", function(d){return d.originText;})
-				.attr("text-anchor", function(d){return d.anchor;})
-	;
+// drawNumbers() draws a set of index numbers for each panel in zig & zag.
+function drawNumbers(canvas, matrix) {
+	var zig = matrix.zigzag[0];
+	var zag = matrix.zigzag[1];
+	g = canvas.append("g").attr("id", "numbers").selectAll("_");
 
-  entries.append("g")
-    .attr("transform", function(d){return d.originEntries;})
-    .selectAll("_")
-    .data(function(d) {return d.entries;}).enter()
+	drawNumbersForOneSide(g, zig.panels);
+	drawNumbersForOneSide(g, zag.panels);
+}
+
+// drawNumbersForOneSide() draws index numbers for each entry in a panel.
+function drawNumbersForOneSide(canvas, panels) {
+	var entries = canvas.data(panels).enter().append("g")
+		.attr("transform", function(d){return d.originText;})
+		.attr("text-anchor", function(d){return d.anchor;})
+	;
+	entries.append("g")
+		.attr("transform", function(d){return d.originEntries;})
+		.selectAll("_")
+		.data(function(d) {return d.entries;}).enter()
 			.append('text')
-      .attr("class", "index")
-      .attr("x", function(d, i){return 2 * i * d.dx;})
-      .attr("y", function(d, i){return 2 * i;})
+			.attr("class", "index")
+			.attr("x", function(d, i){return 2 * i * d.dx;})
+			.attr("y", function(d, i){return 2 * i;})
 			.attr("dx", function(d){return d.dxIndex;})
-      .attr("dy", "-.9")
-      .text(function(d, i){return i + 1;})
-  ;
+			.attr("dy", "-.9")
+			.text(function(d, i){return i + 1;})
+	;
 }
 
 function drawText(xMatrix, zigzag) {
