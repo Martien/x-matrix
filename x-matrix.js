@@ -111,7 +111,6 @@ function drawNumbers(xMatrix, zigzag) {
   	.attr("id", "numbers")
   	.selectAll("_")
   		.data(zigzag).enter().append("g")
-  		.attr("id", function(d){return d.kind;})
   		.selectAll("_")
   			.data(function(d) {return d.panels;}).enter().append("g")
   			.attr("id", function(d){return d.section;})
