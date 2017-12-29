@@ -1,92 +1,87 @@
 [
 	{
 		"title": "Tesla",
-		"gap": 0,
+		"gap": 2,
 		"padding": 1,
 		"arm": 45,
-		"zigzag":
-		[
-			{
-				"kind": "zig",
-				"panels":
-				[
-					{
-						"direction": "north-east",
-						"section": "1—imagine",
-						"anchor": "start",
-						"entries":
-						[
-							{"entry": "The whole world has abundant energy, requiring zero fossile fuel."},
-							{"entry": "100% safe mobility worldwide is transitioned to electric vehicles."},
-							{"entry": "Rest of mobility and energy industry compelled to follow our lead."}
-						]
-					},{
-						"direction": "south-west",
-						"section": "3—objectives",
-						"anchor": "end",
-						"entries":
-						[
-							{"entry": "Produce a sequence of EVs, the current paying for the R&D of the next."},
-							{"entry": "Expand the electric vehicle product line to address all major segments."},
-							{"entry": "Set up global charging network."},
-							{"entry": "Develop 10× safer autopilot capability via massive fleet learning."},
-							{"entry": "Create stunning solar roofs with seamlessly integrated batteries."},
-							{"entry": "Enable your car to make money for you when you aren’t using it."},
-							{"entry": "Maximize vertical integration."},
-							{"entry": "Leverage internet technololgy—OTA, CAS, AI, ML."}
-						]
-					}				]
-			},{
-				"kind": "zag",
-				"panels":
-				[
-					{
-						"direction": "north-west",
-						"section": "2—strategy",
-						"anchor": "end",
-						"entries":
-						[
-							{"entry": "Accelerate the world’s transition to sustainable transport."},
-							{"entry": "Make electrification cool, and propell safest EV for the masses."},
-							{"entry": "Harvest solar energy dirt cheap."},
-							{"entry": "Produce batteries massively with zero footprint."},
-							{"entry": "Sell only direct (zero dealerships)."}
-						]
-					},{
-						"direction": "south-east",
-						"section": "4—evidence",
-						"anchor": "start",
-						"entries":
-						[
-							{"entry": "Model 3 ships."},
-							{"entry": "US & EU 30% coverage of charging stations."},
-							{"entry": "100 km² covered with solar roofs."},
-							{"entry": "Two Gigafactories for batteries up & running."},
-							{"entry": "Monthly production for Model 3 up to 30,000."},
-							{"entry": "Two communities of 20k people 100% electric power."},
-							{"entry": "World’s largest battery storage for Australian wind farm operational."},
-							{"entry": "Huge solar energy plant on the island of Kauai switched on."},
-							{"entry": "09"},
-							{"entry": "10"},
-							{"entry": "11"},
-							{"entry": "12"},
-							{"entry": "13"}
-						]
-					},{
-						"direction": "north-east",
-						"section": "4—team",
-						"anchor": "start",
-						"entries":
-						[
-							{"entry": "John"},
-							{"entry": "Paul"},
-							{"entry": "George"},
-							{"entry": "Ringo"}
-						]
-					}
-
-				]
-			}
-		]
+		"zig": {
+			"panels":
+			[
+				{
+					"direction": "north-east",
+					"section": "1—imagine",
+					"anchor": "start",
+					"entries":
+					[
+						{"entry": "The whole world has abundant energy, requiring zero fossile fuel."},
+						{"entry": "100% safe mobility worldwide is transitioned to electric vehicles."},
+						{"entry": "Rest of mobility and energy industry compelled to follow our lead."}
+					]
+				},{
+					"direction": "south-west",
+					"section": "3—objectives",
+					"anchor": "end",
+					"entries":
+					[
+						{"entry": "Produce a sequence of EVs, the current paying for the R&D of the next."},
+						{"entry": "Expand the electric vehicle product line to address all major segments."},
+						{"entry": "Set up global charging network."},
+						{"entry": "Develop 10× safer autopilot capability via massive fleet learning."},
+						{"entry": "Create stunning solar roofs with seamlessly integrated batteries."},
+						{"entry": "Enable your car to make money for you when you aren’t using it."},
+						{"entry": "Maximize vertical integration."},
+						{"entry": "Leverage internet technololgy—OTA, CAS, AI, ML."}
+					]
+				}				]
+		},
+		"zag": {
+			"panels":
+			[
+				{
+					"direction": "north-west",
+					"section": "2—strategy",
+					"anchor": "end",
+					"entries":
+					[
+						{"entry": "Accelerate the world’s transition to sustainable transport."},
+						{"entry": "Make electrification cool, and propell safest EV for the masses."},
+						{"entry": "Harvest solar energy dirt cheap."},
+						{"entry": "Produce batteries massively with zero footprint."},
+						{"entry": "Sell only direct (zero dealerships)."}
+					]
+				},{
+					"direction": "south-east",
+					"section": "4—evidence",
+					"anchor": "start",
+					"entries":
+					[
+						{"entry": "Model 3 ships."},
+						{"entry": "US & EU 30% coverage of charging stations."},
+						{"entry": "100 km² covered with solar roofs."},
+						{"entry": "Two Gigafactories for batteries up & running."},
+						{"entry": "Monthly production for Model 3 up to 30,000."},
+						{"entry": "Two communities of 20k people 100% electric power."},
+						{"entry": "World’s largest battery storage for Australian wind farm operational."},
+						{"entry": "Huge solar energy plant on the island of Kauai switched on."},
+						{"entry": "09"},
+						{"entry": "10"},
+						{"entry": "11"},
+						{"entry": "12"},
+						{"entry": "13"}
+					]
+				},{
+					"direction": "north-east",
+					"section": "4—team",
+					"anchor": "start",
+					"entries":
+					[
+						{"entry": "John"},
+						{"entry": "Paul"},
+						{"entry": "George"},
+						{"entry": "Ringo"}
+					]
+				}
+			]
+		}
 	}
 ]

@@ -1,0 +1,4 @@
+link='x-matrix.json'
+[ -L "${link}" ] && rm -f "${link}"
+ln -s "x-matrix-${1}.json" "${link}" 
+ls -l "${link}"

@@ -1,0 +1,18 @@
+[
+	{
+		"title": "Tesla",
+		"gap": 2,
+		"padding": 1,
+		"arm": 45,
+		"zig": {
+			"panels":
+			[
+			]
+		},
+		"zag": {
+			"panels":
+			[
+			]
+		}
+	}
+]

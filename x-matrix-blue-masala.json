@@ -3,73 +3,70 @@
 		"title": "Banaan",
 		"gap": 1,
 		"padding": 1,
-		"zigzag":
-		[
-			{
-				"kind": "zig",
-				"panel":
-				[
-					{
-						"direction": "north-east",
-						"section": "dromen",
-						"anchor": "start",
-						"entries":
-						[
-							{"entry": "Nederland is het meest antifragiele land ter wereld."},
-							{"entry": "Heel werkend Nederland geniet van het driedaagse weekend én +20% BNP."},
-							{"entry": "Ál Nederland’s agile & lean trainingsmaterial is Free Cultural Work."}
-						]
-					},{
-						"direction": "south-west",
-						"section": "doen",
-						"anchor": "end",
-						"entries":
-						[
-							{"entry": "Werf kandidaat rebellen trainers en coaches."},
-							{"entry": "Vestig een visuele en persoonlijke identiteit en merkklik."},
-							{"entry": "Publiceer en bevorder website met toonaangevend artikelen."},
-							{"entry": "Schreeuw het viraal van de daken via sociale media."},
-							{"entry": "Oogst 20+ rebelse prospect klanten."},
-							{"entry": "Start een regelmatig opleidings- en trainingscircuit."},
-							{"entry": "Zet de Vloeidag op—100 mensen voor €200 pp Scrumexpert in één dag."},
-							{"entry": "Werf de eerste kandidaten voor de Shape Shifter (inclusief fluiditeitsmonitor)."}
-						]
-					}
-				]
-			},{
-				"kind": "zag",
-				"panel":
-				[
-					{
-						"direction": "north-west",
-						"section": "durven",
-						"anchor": "end",
-						"entries":
-						[
-							{"entry": "Start en kweek een antifragiel gilde van agile vakgenoten ZZP-ers."},
-							{"entry": "Drijf een coalitie met grote partijen (Midden en Grootbedrijf plus universiteiten en hogescholen)."},
-							{"entry": "Maak fundamentele agile praktijkopleiding schandalig goedkoop."},
-							{"entry": "Publiceer al ons materiaal als Free Cultural Work (in plaats van marketing)."},
-							{"entry": "Lanceer een landelijke fluiditeitsmonitor."}
-						]
-					},{
-						"direction": "south-east",
-						"section": "demo",
-						"anchor": "start",
-						"entries":
-						[
-							{"entry": "Eerste Vloeidag in de steigers voor eerste helft 2018."},
-							{"entry": "Tenminste 5 Flow Teams™ in de kweek, elk voor €20k+."},
-							{"entry": "10 aanbiedingen van 30k+ en ≥ 2 coaches op zelfde klant in de pijplijn."},
-							{"entry": "Eerste training als Free Cultural Work gepubliceerd."},
-							{"entry": "Gemiddeld 1 tweet per dag over ons initiatief."},
-							{"entry": "Elke drie weken tenminste één open training volgeboekt."},
-							{"entry": "Groei tot 6 rebellen."},
-							{"entry": "Aanvalsplan voor 2018 met Brunel, Enrise en Emerce beklonken."}
-						]
-					}
-				]
-			}
-		]
+		"arm": 45,
+		"zig": {
+			"panels":
+			[
+				{
+					"direction": "north-east",
+					"section": "dromen",
+					"anchor": "start",
+					"entries":
+					[
+						{"entry": "Nederland is het meest antifragiele land ter wereld."},
+						{"entry": "Heel werkend Nederland geniet van het driedaagse weekend én +20% BNP."},
+						{"entry": "Ál Nederland’s agile & lean trainingsmaterial is Free Cultural Work."}
+					]
+				},{
+					"direction": "south-west",
+					"section": "doen",
+					"anchor": "end",
+					"entries":
+					[
+						{"entry": "Werf kandidaat rebellen trainers en coaches."},
+						{"entry": "Vestig een visuele en persoonlijke identiteit en merkklik."},
+						{"entry": "Publiceer en bevorder website met toonaangevend artikelen."},
+						{"entry": "Schreeuw het viraal van de daken via sociale media."},
+						{"entry": "Oogst 20+ rebelse prospect klanten."},
+						{"entry": "Start een regelmatig opleidings- en trainingscircuit."},
+						{"entry": "Zet de Vloeidag op—100 mensen voor €200 pp Scrumexpert in één dag."},
+						{"entry": "Werf de eerste kandidaten voor de Shape Shifter (inclusief fluiditeitsmonitor)."}
+					]
+				}
+			]
+		},
+		"zag": {
+			"panels":
+			[
+				{
+					"direction": "north-west",
+					"section": "durven",
+					"anchor": "end",
+					"entries":
+					[
+						{"entry": "Start en kweek een antifragiel gilde van agile vakgenoten ZZP-ers."},
+						{"entry": "Drijf een coalitie met grote partijen (Midden en Grootbedrijf plus universiteiten en hogescholen)."},
+						{"entry": "Maak fundamentele agile praktijkopleiding schandalig goedkoop."},
+						{"entry": "Publiceer al ons materiaal als Free Cultural Work (in plaats van marketing)."},
+						{"entry": "Lanceer een landelijke fluiditeitsmonitor."}
+					]
+				},{
+					"direction": "south-east",
+					"section": "demo",
+					"anchor": "start",
+					"entries":
+					[
+						{"entry": "Eerste Vloeidag in de steigers voor eerste helft 2018."},
+						{"entry": "Tenminste 5 Flow Teams™ in de kweek, elk voor €20k+."},
+						{"entry": "10 aanbiedingen van 30k+ en ≥ 2 coaches op zelfde klant in de pijplijn."},
+						{"entry": "Eerste training als Free Cultural Work gepubliceerd."},
+						{"entry": "Gemiddeld 1 tweet per dag over ons initiatief."},
+						{"entry": "Elke drie weken tenminste één open training volgeboekt."},
+						{"entry": "Groei tot 6 rebellen."},
+						{"entry": "Aanvalsplan voor 2018 met Brunel, Enrise en Emerce beklonken."}
+					]
+				}
+			]
+		}
 	}
 ]

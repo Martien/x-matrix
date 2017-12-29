@@ -1,5 +1,6 @@
 d3.json("x-matrix.json", function(error, data) {
 	if (error) return console.warn(error);
+	console.log(data[0]); //return;
 	drawMatrix(data[0]);
 });
 
@@ -72,8 +73,8 @@ function createGradient(defs, id, color) {
 
 // drawPanels() draws the panels (arms & legs), one for zig, one for zag.
 function drawPanels(canvas, matrix) {
-	var zig = matrix.zigzag[0];
-	var zag = matrix.zigzag[1];
+	var zig = matrix.zig;
+	var zag = matrix.zag;
 	var g = canvas.append("g").attr("id", "panels").selectAll("_");
 
 	drawPanel(g, zig.panels);
@@ -94,8 +95,8 @@ function drawPanel(canvas, panels) {
 
 // drawGrids() draws the gridlines, one for zig, one for zag.
 function drawGrids(canvas, matrix) {
-	var zig = matrix.zigzag[0];
-	var zag = matrix.zigzag[1];
+	var zig = matrix.zig;
+	var zag = matrix.zag;
 	g = canvas.append("g").attr("id", "grids").selectAll("_");
 
 	drawGrid(g, zig.panels);
@@ -116,8 +117,8 @@ function drawGrid(canvas, panels) {
 
 // drawNumbers() draws a set of index numbers for each panel in zig & zag.
 function drawNumbers(canvas, matrix) {
-	var zig = matrix.zigzag[0];
-	var zag = matrix.zigzag[1];
+	var zig = matrix.zig;
+	var zag = matrix.zag;
 	g = canvas.append("g").attr("id", "numbers").selectAll("_");
 
 	drawNumbersForOneSide(g, zig.panels);
@@ -146,8 +147,8 @@ function drawNumbersForOneSide(canvas, panels) {
 
 // drawText() renders section title and entries for each panel in zig & zag.
 function drawText(canvas, matrix) {
-	var zig = matrix.zigzag[0];
-	var zag = matrix.zigzag[1];
+	var zig = matrix.zig;
+	var zag = matrix.zag;
 	g = canvas.append("g").attr("id", "texts").selectAll("_");
 
 	drawTextForOneSide(g, zig.panels);
@@ -336,9 +337,9 @@ function setupSide(m, z, s, slope) {
 
 // setupZigzag() augments the data structure for elegant rendering by d3.
 function setupZigZag(matrix) {
-	var zigzag = matrix.zigzag;
-	var zig = zigzag[0];
-	var zag = zigzag[1];
+	//var zigzag = matrix.zigzag;
+	var zig = matrix.zig;
+	var zag = matrix.zag;
 	var zip = 0;
 
 	// Home button of matrix at (0,0) can be clicked. Pointless at the same time.
@@ -363,8 +364,8 @@ function Paneel(x, y, rij) {
 
 function setupClickers(matrix) {
 
-	var zig = matrix.zigzag[0];
-	var zag = matrix.zigzag[1];
+	var zig = matrix.zig;
+	var zag = matrix.zag;
 	var clickers = [];
 
 	// Create array of zigs
