@@ -7,7 +7,7 @@ d3.json("x-matrix.json", function(error, data) {
 
 // drawMatrix() sets up the data and canvas, then draws each layer.
 function drawMatrix(m) {
-  var canvas = setupCanvas();
+  let canvas = setupCanvas();
 	setupGradients(canvas);
   setupZigZag(m);
 	setupStripsAndPatches(m);
@@ -33,14 +33,14 @@ function setupCanvas() {
 
 // setupGradients() defines the translucent gradients used as panel background.
 function setupGradients(canvas) {
-	var defs = canvas.append("defs");
+	let defs = canvas.append("defs");
 
 	createGradient(defs, "fader-north-east", "green");
 	createGradient(defs, "fader-north-west", "orange");
 	createGradient(defs, "fader-south-west", "blue");
 	createGradient(defs, "fader-south-east", "red");
 
-	var gridlineGradient = defs.append("linearGradient")
+	let gridlineGradient = defs.append("linearGradient")
 		.attr("id", "fader-gridline")
 		.attr("x1", "0%")
 		.attr("x2", "100%")
@@ -59,7 +59,7 @@ function setupGradients(canvas) {
 
 // createGradient() defines a specific gradient in svg.
 function createGradient(defs, id, color) {
-	var gradient = defs.append("linearGradient")
+	let gradient = defs.append("linearGradient")
 		.attr("id", id)
 		.attr("x1", "0%")
 		.attr("x2", "100%")
@@ -78,7 +78,7 @@ function createGradient(defs, id, color) {
 
 // drawPanels() draws the panels (arms & legs), one for zig, one for zag.
 function drawPanels(canvas, matrix) {
-	var g = canvas.append("g").attr("id", "panels").selectAll("_");
+	let g = canvas.append("g").attr("id", "panels").selectAll("_");
 	drawPanel(g, matrix.zig.panels);
 	drawPanel(g, matrix.zag.panels);
 }
@@ -99,7 +99,7 @@ function drawPanel(canvas, panels) {
 
 // drawGrids() draws the gridlines, one for zig, one for zag.
 function drawGrids(canvas, matrix) {
-	g = canvas.append("g").attr("id", "grids").selectAll("_");
+	let g = canvas.append("g").attr("id", "grids").selectAll("_");
 	drawGrid(g, matrix.zig.panels);
 	drawGrid(g, matrix.zag.panels);
 }
@@ -118,14 +118,14 @@ function drawGrid(canvas, panels) {
 
 // drawNumbers() draws a set of index numbers for each panel in zig & zag.
 function drawNumbers(canvas, matrix) {
-	g = canvas.append("g").attr("id", "numbers").selectAll("_");
+	let g = canvas.append("g").attr("id", "numbers").selectAll("_");
 	drawNumbersForOneSide(g, matrix.zig.panels);
 	drawNumbersForOneSide(g, matrix.zag.panels);
 }
 
 // drawNumbersForOneSide() draws index numbers for each entry in a panel.
 function drawNumbersForOneSide(canvas, panels) {
-	var entries = canvas.data(panels)
+	let entries = canvas.data(panels)
 		.enter().append("g")
 			.attr("transform",   d => d.originText)
 			.attr("text-anchor", d => d.anchor)
@@ -147,14 +147,14 @@ function drawNumbersForOneSide(canvas, panels) {
 
 // drawText() renders section title and entries for each panel in zig & zag.
 function drawText(canvas, matrix) {
-	g = canvas.append("g").attr("id", "texts").selectAll("_");
+	let g = canvas.append("g").attr("id", "texts").selectAll("_");
 	drawTextForOneSide(g, matrix.zig.panels);
 	drawTextForOneSide(g, matrix.zag.panels);
 }
 
 // drawText() renders section titles and entries for a single side.
 function drawTextForOneSide(canvas, panels) {
-	var entries = canvas.data(panels)
+	let entries = canvas.data(panels)
 		.enter().append("g")
 			.attr("text-anchor", d => d.anchor)
 			.attr("transform",   d => d.originText)
@@ -182,7 +182,7 @@ function drawTextForOneSide(canvas, panels) {
 
 // drawClickers() renders all clickers of alleys of patches of strips.
 function drawClickers(canvas, matrix) {
-	var binding = [ "none", "weak", "strong"];
+	let binding = [ "none", "weak", "strong"];
 	canvas.append("g")
 			.attr("id", "clickers")
 			.attr("transform", "translate(0,2)")
@@ -202,7 +202,7 @@ function drawClickers(canvas, matrix) {
 			.data(d => d)
 		.enter().append("circle") // foreach clicker
 			.attr("class", "dot")
-			.attr("r", "1")
+			.attr("r", ".8")
 			.attr("cx", (d,i) => -2 * i)
 			.attr("cy", (d,i) => +2 * i)
 			.on("click", function(d) {
@@ -214,7 +214,7 @@ function drawClickers(canvas, matrix) {
 
 // drawOrigin() renders a useless clickable dot at the origin.
 function drawOrigin(canvas, matrix) {
-	var fills = ["red", "lightblue", "steelblue", "none"];
+	let fills = ["red", "lightblue", "steelblue", "none"];
   canvas.append("g").attr("id", "home")
     .append("circle")
     .attr("class", "home")
@@ -242,7 +242,7 @@ function setupZigZag(matrix) {
 
 // legLenght() returns the number of units for all panels, plus gaps and padding.
 function legLength(panels, gap, padding) {
-	var units = (panels.length - 1) * gap;
+	let units = (panels.length - 1) * gap;
 	for (j = 0; j < panels.length; j++) {
 		units += panels[j].entries.length;
 	}
@@ -252,29 +252,29 @@ function legLength(panels, gap, padding) {
 // setupSide() sets up one side and returns the start for the next one.
 // The start point is a single number, because x == y.
 function setupSide(m, z, s, slope) {
-	var panels = z.panels;
-	var xx = yy = s; // origin is at (s, s)
-	var xx0 = 0;
-	var yy0 = 0;
+	let panels = z.panels;
+	let xx = yy = s; // origin is at (s, s)
+	let xx0 = 0;
+	let yy0 = 0;
 	//console.log(l);
 
 	for (j = 0; j < panels.length; j++) {
-		panel = panels[j];
+		let panel = panels[j];
 
-		northEast = (slope == +1) && (panel.anchor == "start");
-		northWest = (slope == -1) && (panel.anchor == "end");
-		southEast = (slope == -1) && (panel.anchor == "start");
-		southWest = (slope == +1) && (panel.anchor == "end");
+		let northEast = (slope == +1) && (panel.anchor == "start");
+		let northWest = (slope == -1) && (panel.anchor == "end");
+		let southEast = (slope == -1) && (panel.anchor == "start");
+		let southWest = (slope == +1) && (panel.anchor == "end");
 
-		upperHalf = northEast || northWest;
-		lowerHalf = southEast || southWest;
+		let upperHalf = northEast || northWest;
+		let lowerHalf = southEast || southWest;
 
-		leftHalf  = northWest || southWest;
-		rightHalf = northEast || southEast;
+		let leftHalf  = northWest || southWest;
+		let rightHalf = northEast || southEast;
 
 		// At each entry store the slope, so consecutive entries staircase
 		// in the right direction.
-		for (e = 0; e < panel.entries.length; e++) {
+		for (let e = 0; e < panel.entries.length; e++) {
 			panel.entries[e].slope = slope;
 			panel.entries[e].dxIndex = 1.5 * (upperHalf ? -slope : slope);
 		}
@@ -284,12 +284,12 @@ function setupSide(m, z, s, slope) {
 		// Since panels and grids all draw from (0,0), they need to
 		// nudge themselves #rows left&down when flipped vertically and
 		// #rows right&down when flipped both vertically & horizontally.
-		nudgeX = upperHalf ? 0 : 2 * slope * panel.entries.length;
-		nudgeY = slope * nudgeX;
+		let nudgeX = upperHalf ? 0 : 2 * slope * panel.entries.length;
+		let nudgeY = slope * nudgeX;
 		// Flip left-right when we are in the left side.
-		scaleX = rightHalf ? +1 : -1;
+		let scaleX = rightHalf ? +1 : -1;
 		// Flip up-down when we are in the lower half.
-		scaleY = upperHalf ? +1 : -1;
+		let scaleY = upperHalf ? +1 : -1;
 
 		// Add local transformation string for panel or gridLines.
 		panel.originPanel = translate(nudgeX, nudgeY) + scale(scaleX, scaleY);
@@ -369,7 +369,7 @@ function setupStripsAndPatches(m) {
 
 // Patch() returns a two-dimensional array with clickers.
 function Patch(r, c) {
-	var p = new Array(r);
+	let p = new Array(r);
 	for (let i = 0; i < r; i++) {
 		p[i] = new Array(c);
 			for (let j = 0; j < c; j++) {
@@ -382,7 +382,7 @@ function Patch(r, c) {
 // panelPath() returns the <path> string that composes panel p.
 // Uses relative lines, so transform() it into proper place and orientation.
 function panelPath(rows, leg, arm) {
-		var width = 2 * rows;
+		let width = 2 * rows;
 		return m(0, 0)
 			+ l(arm, 0)
       + l(width, width)
@@ -396,7 +396,7 @@ function panelPath(rows, leg, arm) {
 // gridlines() returns a single string with the <path> for all the gridlines
 // of panel p.
 function gridLines(rows, leg, arm) {
-	var lines = "";
+	let lines = "";
   for (h = 0; h <= rows; h++) {
     lines += M(arm + 2 * h, 2 * h)
       + l(-arm, 0)
@@ -416,8 +416,8 @@ function scale(x, y) {
 }
 // Convenience functions to compose a path while keeping the code readable.
 function M(x, y) {
-		return "M" + x + " " + y + " ";
-	}
+	return "M" + x + " " + y + " ";
+}
 
 function m(x, y) {
 	return "m" + x + " " + y + " ";
