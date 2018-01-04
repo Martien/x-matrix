@@ -63,14 +63,30 @@ svg-content {
   fill: none;
 }
 
-#dot {
-  fill: lightgreen;
-  pointer-events: all;            /* SVG only */
-}
-#dot:hover {
+.dot:hover {
   stroke: steelblue;
   stroke-width: 0.1mm;
 }
+
+.dot {
+  fill: none;
+	stroke-width: 0.1mm;
+  pointer-events: all;            /* SVG only */
+}
+
+.dot.none {
+	fill: none;
+}
+
+.dot.weak {
+	stroke: black;
+}
+
+.dot.strong {
+	stroke: black;
+	fill: black;
+}
+
 .direction {
   fill: inherit;
   opacity: 0.1

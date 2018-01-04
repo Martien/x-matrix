@@ -1,33 +1,37 @@
+// Read in the matrix.json and render it.
 d3.json("x-matrix.json", function(error, data) {
 	if (error) return console.warn(error);
-	console.log(data[0]); //return;
+	//console.log(data[0]); //return;
 	drawMatrix(data[0]);
 });
 
-// drawMatrix() sets up the canvas, then draws each layer.
+// drawMatrix() sets up the data and canvas, then draws each layer.
 function drawMatrix(m) {
   var canvas = setupCanvas();
 	setupGradients(canvas);
   setupZigZag(m);
+	setupStripsAndPatches(m);
 	drawPanels(canvas, m);
 	drawGrids(canvas, m);
 	drawNumbers(canvas, m);
-	//drawClickers(canvas, m);
+	drawClickers(canvas, m);
 	drawText(canvas, m);
   drawOrigin(canvas, m);
 }
 
+// setupCanvas() sets up the svg viewbox and scale.
 function setupCanvas() {
   return d3.select("body")
     .append("svg")
-    .attr("viewBox", "-500 -50 1000 2000")
-    .attr("preserveAspectRatio", "xMaxYMax meet")
+	    .attr("viewBox", "-500 -50 1000 2000")
+	    .attr("preserveAspectRatio", "xMaxYMax meet")
     .append("g")
-    .attr("id", "x-matrix")
-    .attr("transform", "scale(5)")
+	    .attr("id", "x-matrix")
+	    .attr("transform", "scale(5)")
   ;
 }
 
+// setupGradients() defines the translucent gradients used as panel background.
 function setupGradients(canvas) {
 	var defs = canvas.append("defs");
 
@@ -53,6 +57,7 @@ function setupGradients(canvas) {
 		;
 }
 
+// createGradient() defines a specific gradient in svg.
 function createGradient(defs, id, color) {
 	var gradient = defs.append("linearGradient")
 		.attr("id", id)
@@ -73,160 +78,141 @@ function createGradient(defs, id, color) {
 
 // drawPanels() draws the panels (arms & legs), one for zig, one for zag.
 function drawPanels(canvas, matrix) {
-	var zig = matrix.zig;
-	var zag = matrix.zag;
 	var g = canvas.append("g").attr("id", "panels").selectAll("_");
-
-	drawPanel(g, zig.panels);
-	drawPanel(g, zag.panels);
+	drawPanel(g, matrix.zig.panels);
+	drawPanel(g, matrix.zag.panels);
 }
 
 // drawPanel() draws the panels (arms & legs) for a single side.
 function drawPanel(canvas, panels) {
-	canvas.data(panels).enter().append("g")
-		.attr("transform", function(d){return d.transform;})
-		.append("path")
-		.attr("class", function(d, i){return d.direction;})
-		.attr("fill", function(d){return "url(#fade-" + d.direction + ")";})
-		.attr("transform", function(d){return d.originPanel})
-		.attr("d", function(d){return d.panelPath;})
+	canvas.data(panels)
+		.enter()
+			.append("g")
+				.attr("transform",   (d) => {return d.transform;})
+				.append("path")
+					.attr("class",     (d) => {return d.direction;})
+					.attr("fill",      (d) => {return "url(#fade-" + d.direction + ")";})
+					.attr("transform", (d) => {return d.originPanel})
+					.attr("d",         (d) => {return d.panelPath;})
 	;
 }
 
 // drawGrids() draws the gridlines, one for zig, one for zag.
 function drawGrids(canvas, matrix) {
-	var zig = matrix.zig;
-	var zag = matrix.zag;
 	g = canvas.append("g").attr("id", "grids").selectAll("_");
-
-	drawGrid(g, zig.panels);
-	drawGrid(g, zag.panels);
+	drawGrid(g, matrix.zig.panels);
+	drawGrid(g, matrix.zag.panels);
 }
 
 // drawGrid() draws the gridlines for a single side.
 function drawGrid(canvas, panels) {
 	canvas.data(panels).enter().append("g")
-		.attr("transform", function(d){return d.transform;})
+		.attr("transform",   (d) => {return d.transform;})
 		.append("path")
-		.attr("class", "hairline")
-		.attr("stroke", "url(#fader-gridline)")
-		.attr("transform", function(d){return d.originPanel})
-		.attr("d", function(d){return d.gridLines;})
+			.attr("class", "hairline")
+			.attr("stroke", "url(#fader-gridline)")
+			.attr("transform", (d) => {return d.originPanel})
+			.attr("d",         (d) => {return d.gridLines;})
 	;
 }
 
 // drawNumbers() draws a set of index numbers for each panel in zig & zag.
 function drawNumbers(canvas, matrix) {
-	var zig = matrix.zig;
-	var zag = matrix.zag;
 	g = canvas.append("g").attr("id", "numbers").selectAll("_");
-
-	drawNumbersForOneSide(g, zig.panels);
-	drawNumbersForOneSide(g, zag.panels);
+	drawNumbersForOneSide(g, matrix.zig.panels);
+	drawNumbersForOneSide(g, matrix.zag.panels);
 }
 
 // drawNumbersForOneSide() draws index numbers for each entry in a panel.
 function drawNumbersForOneSide(canvas, panels) {
-	var entries = canvas.data(panels).enter().append("g")
-		.attr("transform", function(d){return d.originText;})
-		.attr("text-anchor", function(d){return d.anchor;})
+	var entries = canvas.data(panels)
+		.enter().append("g")
+			.attr("transform",   (d) => {return d.originText;})
+			.attr("text-anchor", (d) => {return d.anchor;})
 	;
 	entries.append("g")
-		.attr("transform", function(d){return d.originEntries;})
-		.selectAll("_")
-		.data(function(d) {return d.entries;}).enter()
+			.attr("transform", (d) => {return d.originEntries;})
+			.selectAll("_")
+			.data((d) => {return d.entries;})
+		.enter()
 			.append('text')
-			.attr("class", "index")
-			.attr("x", function(d, i){return 2 * i * d.slope;})
-			.attr("y", function(d, i){return 2 * i;})
-			.attr("dx", function(d){return d.dxIndex;})
-			.attr("dy", "-.9")
-			.text(function(d, i){return i + 1;})
+				.attr("class", "index")
+				.attr("x", (d, i) => {return 2 * i * d.slope;})
+				.attr("y", (d, i) => {return 2 * i;})
+				.attr("dx",   (d) => {return d.dxIndex;})
+				.attr("dy", "-.9")
+				.text((d, i) => {return i + 1;})
 	;
 }
 
 // drawText() renders section title and entries for each panel in zig & zag.
 function drawText(canvas, matrix) {
-	var zig = matrix.zig;
-	var zag = matrix.zag;
 	g = canvas.append("g").attr("id", "texts").selectAll("_");
-
-	drawTextForOneSide(g, zig.panels);
-	drawTextForOneSide(g, zag.panels);
+	drawTextForOneSide(g, matrix.zig.panels);
+	drawTextForOneSide(g, matrix.zag.panels);
 }
 
 // drawText() renders section titles and entries for a single side.
 function drawTextForOneSide(canvas, panels) {
-	var entries = canvas.data(panels).enter().append("g")
-		.attr("text-anchor", function(d){return d.anchor;})
-		.attr("transform", function(d){return d.originText;})
+	var entries = canvas.data(panels)
+		.enter().append("g")
+			.attr("text-anchor", (d) => {return d.anchor;})
+			.attr("transform",   (d) => {return d.originText;})
 	;
 	// section titles
-	entries.append("text").attr("class", "section")
-		.attr("dy", "-.5")
-		.text(function(d){return d.section;})
+	entries.append("text")
+		.attr("class", "section")
+		.attr("dy", "-.3")
+		.text((d) => {return d.section;})
 	;
 	// entries
 	entries.append("g")
-		.attr("transform", function(d){return d.originEntries;})
-		.selectAll("_")
-		.data(function(d) {return d.entries;})
-			.enter().append('text')
-			.attr("class", "entry")
-			.attr("x", function(d, i){return 2 * i * d.slope;})
-			.attr("y", function(d, i){return 2 * i;})
-			.attr("dy", "-.5")
-			.text(function(d, i){return d.entry;})
+			.attr("transform", (d) => {return d.originEntries;})
+			.selectAll("_")
+			.data((d) => {return d.entries;})
+		.enter()
+			.append('text')
+				.attr("class", "entry")
+				.attr("x", function(d, i){return 2 * i * d.slope;})
+				.attr("y", function(d, i){return 2 * i;})
+				.attr("dy", "-.5")
+				.text((d) => {return d.entry;})
 	;
 }
 
+// drawClickers() renders all clickers of alleys of patches of strips.
 function drawClickers(canvas, matrix) {
-	var clickers = setupClickers(matrix);
-	console.log(clickers);
-	var rows = canvas.append("g").attr("id", "clickers")
-	.attr("transform", "translate(0,2)")
-	.selectAll("_")
-		.data(clickers).enter().append("g")
-		.attr("id", "row")
-		;
-	var columns = rows.selectAll("_")
-		.data(function(d, i){
-			//console.log(d);
-			return d;}).enter().append("g")
-		.attr("id", "column")
-		.attr("transform", function(d,i){
-			//console.log(d);
-		})
-		;
-	var stripes = columns.selectAll("_")
-		.data(function(d, i){
-			//console.log(d);
-			return d;
-		}).enter().append("g")
-		.attr("id", "stripe")
-		.attr("transform", function(d,i){return "translate(" + 2*i + "," + 2*i + ")";})
-
-		;
-	var zorks = stripes.selectAll("_")
-		.data(function(d, i){return d;}).enter().append("g")
-		.attr("id", "zork")
-		;
-
-	var fills = [ "none", "grey", "black"];
-
-	zorks.append("g")
-		.append("circle")
-		.attr("id", "dot")
-		.attr("r", "1")
-		.attr("cx", function(d,i){return -2 * i;})
-		.attr("cy", function(d,i){return 2 * i;})
-		.on("click", function(d){
-			console.log(d.clicks);
-			d3.select(this).style("fill", fills[(++d.clicks % fills.length)]);
-		})
-		;
+	var binding = [ "none", "weak", "strong"];
+	canvas.append("g")
+			.attr("id", "clickers")
+			.attr("transform", "translate(0,2)")
+			.selectAll("_")
+			.data(matrix.zig.strip)
+		.enter() // foreach strip
+			.selectAll("_")
+			.data((d) => {return d;})
+		.enter().append("g") // foreach patch
+			.attr("transform",
+				(d) => {return translate(2 * d.originNorth.x, 2 * d.originNorth.y);})
+			.selectAll("_")
+			.data((d) => {return d.patch;})
+		.enter().append("g") // foreach alley
+			.attr("transform", (d,i) => { return translate(2 * i, 2 * i);})
+			.selectAll("_")
+			.data((d,i) => {return d;})
+		.enter().append("circle") // foreach clicker
+			.attr("class", "dot")
+			.attr("r", "1")
+			.attr("cx", (d,i) => {return -2 * i;})
+			.attr("cy", (d,i) => {return +2 * i;})
+			.on("click", function(d) {
+				d3.select(this)
+					.attr("class", "dot " + binding[(++d.clicks % binding.length)]);
+			})
+	;
 }
 
+// drawOrigin() renders a useless clickable dot at the origin.
 function drawOrigin(canvas, matrix) {
 	var fills = ["red", "lightblue", "steelblue", "none"];
   canvas.append("g").attr("id", "home")
@@ -239,6 +225,21 @@ function drawOrigin(canvas, matrix) {
     ;
 }
 
+// setupZigzag() augments the data structure for elegant rendering by d3.
+function setupZigZag(matrix) {
+	let zip = 0;
+
+	// Home button of matrix at (0,0) can be clicked. Pointless at the same time.
+	matrix.clicks = 0;
+
+	// The length of one leg is the other’s number of units.
+	matrix.zag.leg = legLength(matrix.zig.panels, matrix.gap, matrix.padding);
+	matrix.zig.leg = legLength(matrix.zag.panels, matrix.gap, matrix.padding);
+
+	zip = setupSide(matrix, matrix.zig, zip, +1); // zig starts at (0,0)
+	zip = setupSide(matrix, matrix.zag, zip, -1); // zag starts where zig ended
+}
+
 // legLenght() returns the number of units for all panels, plus gaps and padding.
 function legLength(panels, gap, padding) {
 	var units = (panels.length - 1) * gap;
@@ -247,7 +248,6 @@ function legLength(panels, gap, padding) {
 	}
 	return 2 * (units + padding);
 }
-
 
 // setupSide() sets up one side and returns the start for the next one.
 // The start point is a single number, because x == y.
@@ -335,78 +335,54 @@ function setupSide(m, z, s, slope) {
 	return yy;
 }
 
-// setupZigzag() augments the data structure for elegant rendering by d3.
-function setupZigZag(matrix) {
-	//var zigzag = matrix.zigzag;
-	var zig = matrix.zig;
-	var zag = matrix.zag;
-	var zip = 0;
-
-	// Home button of matrix at (0,0) can be clicked. Pointless at the same time.
-	matrix.clicks = 0;
-
-	// The length of one leg is the other’s number of units.
-	zag.leg = legLength(zig.panels, matrix.gap, matrix.padding);
-	zig.leg = legLength(zag.panels, matrix.gap, matrix.padding);
-
-	zip = setupSide(matrix, zig, zip, +1); // zig starts at (0,0)
-	zip = setupSide(matrix, zag, zip, -1); // zag starts where zig ended
-
-	console.log(matrix);
-	console.log(Object.keys(matrix));
-}
-
-function Paneel(x, y, rij) {
-	this.x = x;
-	this.y = y;
-	this.rij = [];
-}
-
-function setupClickers(matrix) {
-
-	var zig = matrix.zig;
-	var zag = matrix.zag;
-	var clickers = [];
-
-	// Create array of zigs
-	// of array of panels (zags)
-	// of array of rows
-	// of array of cells with click variable.
-	tick = 0;
-	tack = 0;
-
-	for (i = 0; i < zig.panels.length; i++) {
-		clickers.push([]);
+// setupStripsAndPatches() creates strips of patches of alleys of clickers.
+function setupStripsAndPatches(m) {
+	let xx = yy = 0;
+	m.zig.strip = new Array(m.zig.panels.length);
+	for (let i = 0; i < m.zig.strip.length; i++) {
+		let width = m.zig.panels[i].entries.length;
+		m.zig.strip[i] = new Array(m.zag.panels.length);
 		if (i > 0) {
-			tick += matrix.gap;
+			xx += m.gap;
+			yy += m.gap;
 		}
-		for (j = 0; j < zag.panels.length; j++) {
+		let xx0 = xx;
+		let yy0 = yy;
+		for (let j = 0; j < m.zig.strip[i].length; j++) {
+			let height = m.zag.panels[j].entries.length;
 			if (j > 0) {
-				tack += matrix.gap;
+				xx0 -= m.gap;
+				yy0 += m.gap;
 			}
-			clickers[i].push([]);
-			for (k = 0; k < zig.panels[i].entries.length; k++) {
-				clickers[i][j].push([]);
-				for (q = 0; q < zag.panels[j].entries.length; q++) {
-					clickers[i][j][k].push({
-						clicks: 0
-					});
-				}
-			}
-			tack += zag.panels[j].entries.length;
+			m.zig.strip[i][j] = {
+				originNorth: {x: xx0, y: yy0},
+				originSouth: {x: xx0 + width, y: yy0 + width},
+				patch: Patch(width, height)
+			};
+			xx0 -= height;
+			yy0 += height;
 		}
-		tick += zig.panels[i].entries.length;
-		tack = 0
+		xx += width;
+		yy += width;
 	}
-	return clickers;
 }
 
-function panelPath(rows, leg, arm) {
-	// panelPath() returns the <path> string that composes panel p.
-	// Uses relative lines, so transform() it into proper place and orientation.
-		var
-		  width = 2 * rows;
+// Patch() returns a two-dimensional array with clickers.
+function Patch(r, c) {
+	var p = new Array(r);
+	for (let i = 0; i < r; i++) {
+		p[i] = new Array(c);
+			for (let j = 0; j < c; j++) {
+				p[i][j] = {clicks: 0};
+		}
+	}
+	return p;
+}
 
+// panelPath() returns the <path> string that composes panel p.
+// Uses relative lines, so transform() it into proper place and orientation.
+function panelPath(rows, leg, arm) {
+		var width = 2 * rows;
 		return m(0, 0)
 			+ l(arm, 0)
       + l(width, width)
@@ -417,9 +393,9 @@ function panelPath(rows, leg, arm) {
 		;
 	};
 
+// gridlines() returns a single string with the <path> for all the gridlines
+// of panel p.
 function gridLines(rows, leg, arm) {
-	// gridlines() returns a single string with the <path> for all the gridlines
-	// of panel p.
 	var lines = "";
   for (h = 0; h <= rows; h++) {
     lines += M(arm + 2 * h, 2 * h)
@@ -429,10 +405,12 @@ function gridLines(rows, leg, arm) {
 	return lines;
 }
 
+// translate() returns a string with the translation.
 function translate(x, y) {
   return "translate(" + x + "," + y + ") ";
 }
 
+// scale() returns a string with the scale.
 function scale(x, y) {
   return "scale(" + x + "," + y + ") ";
 }
@@ -457,13 +435,13 @@ function other(i) {
   return (i + 1) % 2;
 }
 
-function mod(n, w, j) {
 // mod() is like %, but loops through all w, 0-1-2 … w, even for negative n.
 // E.g. mod(0, 4, -1) = 3, rather than -1 when using the % operator.
 // j is the ‘jump’ forward or backward.
 // (n + j) % w brings it into range -(w - 1) … (w - 1).
 // Adding w brings it into range ≥ 0 (but not necessarily < w).
 // Finally, %w brings it into range 0 … (w - 1).
+function mod(n, w, j) {
 	return ((n + j) % w + w) % w;
 }
 

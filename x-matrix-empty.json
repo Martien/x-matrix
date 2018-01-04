@@ -1,17 +1,54 @@
 [
 	{
 		"title": "Tesla",
-		"gap": 2,
+		"gap": 1,
 		"padding": 1,
-		"arm": 45,
+		"arm": 36,
 		"zig": {
 			"panels":
 			[
+				{
+					"direction": "north-east",
+					"section": "1—imagine",
+					"anchor": "start",
+					"entries":
+					[
+					]
+				},{
+					"direction": "south-west",
+					"section": "3—objectives",
+					"anchor": "end",
+					"entries":
+					[
+					]
+				}
 			]
 		},
 		"zag": {
 			"panels":
 			[
+				{
+					"direction": "north-west",
+					"section": "2—strategy",
+					"anchor": "end",
+					"entries":
+					[
+					]
+				},{
+					"direction": "south-east",
+					"section": "4—evidence",
+					"anchor": "start",
+					"entries":
+					[
+					]
+				},{
+					"direction": "north-east",
+					"section": "5—team",
+					"anchor": "start",
+					"entries":
+					[
+					]
+				}
 			]
 		}
 	}
