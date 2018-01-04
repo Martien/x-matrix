@@ -88,12 +88,12 @@ function drawPanel(canvas, panels) {
 	canvas.data(panels)
 		.enter()
 			.append("g")
-				.attr("transform",   (d) => {return d.transform;})
+				.attr("transform",   d => d.transform)
 				.append("path")
-					.attr("class",     (d) => {return d.direction;})
-					.attr("fill",      (d) => {return "url(#fade-" + d.direction + ")";})
-					.attr("transform", (d) => {return d.originPanel})
-					.attr("d",         (d) => {return d.panelPath;})
+					.attr("class",     d => d.direction)
+					.attr("fill",      d => "url(#fade-" + d.direction + ")")
+					.attr("transform", d => d.originPanel)
+					.attr("d",         d => d.panelPath)
 	;
 }
 
@@ -107,12 +107,12 @@ function drawGrids(canvas, matrix) {
 // drawGrid() draws the gridlines for a single side.
 function drawGrid(canvas, panels) {
 	canvas.data(panels).enter().append("g")
-		.attr("transform",   (d) => {return d.transform;})
+		.attr("transform",   d => d.transform)
 		.append("path")
 			.attr("class", "hairline")
 			.attr("stroke", "url(#fader-gridline)")
-			.attr("transform", (d) => {return d.originPanel})
-			.attr("d",         (d) => {return d.gridLines;})
+			.attr("transform", d => d.originPanel)
+			.attr("d",         d => d.gridLines)
 	;
 }
 
@@ -127,21 +127,21 @@ function drawNumbers(canvas, matrix) {
 function drawNumbersForOneSide(canvas, panels) {
 	var entries = canvas.data(panels)
 		.enter().append("g")
-			.attr("transform",   (d) => {return d.originText;})
-			.attr("text-anchor", (d) => {return d.anchor;})
+			.attr("transform",   d => d.originText)
+			.attr("text-anchor", d => d.anchor)
 	;
 	entries.append("g")
-			.attr("transform", (d) => {return d.originEntries;})
+			.attr("transform", d => d.originEntries)
 			.selectAll("_")
-			.data((d) => {return d.entries;})
+			.data(d => d.entries)
 		.enter()
 			.append('text')
 				.attr("class", "index")
-				.attr("x", (d, i) => {return 2 * i * d.slope;})
-				.attr("y", (d, i) => {return 2 * i;})
-				.attr("dx",   (d) => {return d.dxIndex;})
+				.attr("x", (d, i) => 2 * i * d.slope)
+				.attr("y", (d, i) => 2 * i)
+				.attr("dx",     d => d.dxIndex)
 				.attr("dy", "-.9")
-				.text((d, i) => {return i + 1;})
+				.text((d, i) => i + 1)
 	;
 }
 
@@ -156,27 +156,27 @@ function drawText(canvas, matrix) {
 function drawTextForOneSide(canvas, panels) {
 	var entries = canvas.data(panels)
 		.enter().append("g")
-			.attr("text-anchor", (d) => {return d.anchor;})
-			.attr("transform",   (d) => {return d.originText;})
+			.attr("text-anchor", d => d.anchor)
+			.attr("transform",   d => d.originText)
 	;
 	// section titles
 	entries.append("text")
 		.attr("class", "section")
 		.attr("dy", "-.3")
-		.text((d) => {return d.section;})
+		.text(d => d.section)
 	;
 	// entries
 	entries.append("g")
-			.attr("transform", (d) => {return d.originEntries;})
+			.attr("transform", d => d.originEntries)
 			.selectAll("_")
-			.data((d) => {return d.entries;})
+			.data(d => d.entries)
 		.enter()
 			.append('text')
 				.attr("class", "entry")
-				.attr("x", function(d, i){return 2 * i * d.slope;})
-				.attr("y", function(d, i){return 2 * i;})
+				.attr("x", (d, i) => 2 * i * d.slope)
+				.attr("y", (d, i) => 2 * i)
 				.attr("dy", "-.5")
-				.text((d) => {return d.entry;})
+				.text(d => d.entry)
 	;
 }
 
@@ -190,21 +190,21 @@ function drawClickers(canvas, matrix) {
 			.data(matrix.zig.strip)
 		.enter() // foreach strip
 			.selectAll("_")
-			.data((d) => {return d;})
+			.data(d => d)
 		.enter().append("g") // foreach patch
 			.attr("transform",
-				(d) => {return translate(2 * d.originNorth.x, 2 * d.originNorth.y);})
+				d => translate(2 * d.originNorth.x, 2 * d.originNorth.y))
 			.selectAll("_")
-			.data((d) => {return d.patch;})
+			.data(d => d.patch)
 		.enter().append("g") // foreach alley
-			.attr("transform", (d,i) => { return translate(2 * i, 2 * i);})
+			.attr("transform", (d,i) => translate(2 * i, 2 * i))
 			.selectAll("_")
-			.data((d,i) => {return d;})
+			.data(d => d)
 		.enter().append("circle") // foreach clicker
 			.attr("class", "dot")
 			.attr("r", "1")
-			.attr("cx", (d,i) => {return -2 * i;})
-			.attr("cy", (d,i) => {return +2 * i;})
+			.attr("cx", (d,i) => -2 * i)
+			.attr("cy", (d,i) => +2 * i)
 			.on("click", function(d) {
 				d3.select(this)
 					.attr("class", "dot " + binding[(++d.clicks % binding.length)]);
